@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>급식 만족도 평가</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="fixed-header">
+        <div class="header-content">
+            <button id="menuBtn" class="menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1>오늘의 급식 만족도 평가</h1>
+            <p class="date">2024년 3월 21일</p>
+        </div>
+        <nav id="sideNav" class="side-nav">
+            <div class="nav-header">
+                <button id="closeBtn" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul>
+                <li><a href="#meal-info">오늘의 메뉴</a></li>
+                <li><a href="#rating">만족도 평가</a></li>
+                <li><a href="#comments">의견 남기기</a></li>
+                <li><a href="#popular-menu">인기 메뉴</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content-wrapper">
+        <main>
+            <section id="meal-info" class="meal-info">
+                <h2>오늘의 메뉴</h2>
+                <div class="menu-list">
+                    <div class="menu-item">
+                        <p>제육볶음, 김치, 시금치무침, 콩나물무침, 미역국</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="rating" class="rating">
+                <h2>만족도 평가</h2>
+                <div class="emoji-rating">
+                    <button class="emoji-btn" data-rating="5">😍</button>
+                    <button class="emoji-btn" data-rating="4">😊</button>
+                    <button class="emoji-btn" data-rating="3">😐</button>
+                    <button class="emoji-btn" data-rating="2">😕</button>
+                    <button class="emoji-btn" data-rating="1">😫</button>
+                </div>
+            </section>
+
+            <section id="comments" class="comments">
+                <h2>의견 남기기</h2>
+                <div class="comment-form">
+                    <div class="comment-type-selector">
+                        <label>
+                            <input type="radio" name="commentType" value="public" checked>
+                            공개 댓글
+                        </label>
+                        <label>
+                            <input type="radio" name="commentType" value="private">
+                            비공개 댓글
+                        </label>
+                    </div>
+                    <textarea placeholder="급식에 대한 의견을 자유롭게 남겨주세요. (익명으로 처리됩니다)" rows="4"></textarea>
+                    <button class="submit-btn">제출하기</button>
+                </div>
+
+                <div class="comment-board">
+                    <h3>공개 댓글</h3>
+                    <div class="comment-list">
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-time">오후 12:30</span>
+                                <span class="comment-rating">평가: 😍</span>
+                                <div class="comment-actions">
+                                    <div class="dropdown">
+                                        <button class="dropbtn">⋮</button>
+                                        <div class="dropdown-content">
+                                            <a href="#" class="edit-btn">수정</a>
+                                            <a href="#" class="delete-btn">삭제</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-content">제육볶음이 너무 맛있었어요! 다음에도 많이 나왔으면 좋겠습니다.</p>
+                        </div>
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-time">오후 12:15</span>
+                                <span class="comment-rating">평가: 😊</span>
+                                <div class="comment-actions">
+                                    <div class="dropdown">
+                                        <button class="dropbtn">⋮</button>
+                                        <div class="dropdown-content">
+                                            <a href="#" class="edit-btn">수정</a>
+                                            <a href="#" class="delete-btn">삭제</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-content">미역국이 좀 짰지만 전체적으로 맛있었습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="popular-menu" class="popular-menu">
+                <h2>이번 달 인기 메뉴 TOP3</h2>
+                <div class="top-rated-list">
+                    <div class="top-rated-item">
+                        <div class="menu-info">
+                            <h3>TOP1</h3>
+                            <p class="menu-date">2024-03-15</p>
+                            <p class="menu-rating">평균 만족도: 4.8</p>
+                        </div>
+                        <div class="menu-details">
+                            <p>메뉴 구성: 제육볶음, 김치, 시금치무침, 콩나물무침, 미역국</p>
+                            <p>총 평가 수: 120명</p>
+                        </div>
+                    </div>
+                    <div class="top-rated-item">
+                        <div class="menu-info">
+                            <h3>TOP2</h3>
+                            <p class="menu-date">2024-03-10</p>
+                            <p class="menu-rating">평균 만족도: 4.6</p>
+                        </div>
+                        <div class="menu-details">
+                            <p>메뉴 구성: 김치찌개, 제육볶음, 깍두기, 계란찜, 미역국</p>
+                            <p>총 평가 수: 115명</p>
+                        </div>
+                    </div>
+                    <div class="top-rated-item">
+                        <div class="menu-info">
+                            <h3>TOP3</h3>
+                            <p class="menu-date">2024-03-05</p>
+                            <p class="menu-rating">평균 만족도: 4.5</p>
+                        </div>
+                        <div class="menu-details">
+                            <p>메뉴 구성: 돈까스, 김치, 콩나물무침, 계란찜, 미역국</p>
+                            <p>총 평가 수: 118명</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 급식 만족도 평가 시스템</p>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+    <script>
+        document.getElementById('menuBtn').addEventListener('click', function () {
+            document.getElementById('sideNav').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        document.getElementById('closeBtn').addEventListener('click', function () {
+            document.getElementById('sideNav').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // 부드러운 스크롤 이동 및 메뉴 닫기
+        document.querySelectorAll('.side-nav a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        window.scrollTo({
+                            top: target.getBoundingClientRect().top + window.scrollY - document.querySelector('.fixed-header').offsetHeight - 10,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                document.getElementById('sideNav').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            });
+        });
+    </script>
+</body>
+
+</html>

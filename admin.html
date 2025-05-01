@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>급식 만족도 평가 - 관리자 페이지</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <h1>급식 만족도 평가 관리자 페이지</h1>
+        <nav>
+            <ul>
+                <li><a href="#top-rated">만족도 TOP3 기록</a></li>
+                <li><a href="#comments">의견</a></li>
+                <li><a href="#users">가입자 현황</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="top-rated" class="admin-section">
+            <h2>만족도 TOP3 기록</h2>
+            <div class="month-selector">
+                <select>
+                    <option>2024년 3월</option>
+                    <option>2024년 2월</option>
+                    <option>2024년 1월</option>
+                </select>
+            </div>
+            <div class="top-rated-list">
+                <div class="top-rated-item">
+                    <div class="menu-info">
+                        <h3>TOP1</h3>
+                        <p class="menu-date">2024-03-15</p>
+                        <p class="menu-rating">평균 만족도: 4.8</p>
+                    </div>
+                    <div class="menu-details">
+                        <p>메뉴 구성: 제육볶음, 김치, 시금치무침, 콩나물무침, 미역국</p>
+                        <p>총 평가 수: 120명</p>
+                        <p>😍: 85명, 😊: 25명, 😐: 8명, 😕: 2명, 😫: 0명</p>
+                    </div>
+                </div>
+                <div class="top-rated-item">
+                    <div class="menu-info">
+                        <h3>TOP2</h3>
+                        <p class="menu-date">2024-03-10</p>
+                        <p class="menu-rating">평균 만족도: 4.6</p>
+                    </div>
+                    <div class="menu-details">
+                        <p>메뉴 구성: 김치찌개, 제육볶음, 깍두기, 계란찜, 미역국</p>
+                        <p>총 평가 수: 115명</p>
+                        <p>😍: 75명, 😊: 30명, 😐: 8명, 😕: 2명, 😫: 0명</p>
+                    </div>
+                </div>
+                <div class="top-rated-item">
+                    <div class="menu-info">
+                        <h3>TOP3</h3>
+                        <p class="menu-date">2024-03-05</p>
+                        <p class="menu-rating">평균 만족도: 4.5</p>
+                    </div>
+                    <div class="menu-details">
+                        <p>메뉴 구성: 돈까스, 김치, 콩나물무침, 계란찜, 미역국</p>
+                        <p>총 평가 수: 118명</p>
+                        <p>😍: 70명, 😊: 35명, 😐: 10명, 😕: 3명, 😫: 0명</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="comments" class="admin-section">
+            <h2>학생 의견</h2>
+            <div class="comment-filters">
+                <select>
+                    <option>전체 기간</option>
+                    <option>최근 1주일</option>
+                    <option>최근 1개월</option>
+                </select>
+            </div>
+            <div class="comment-list">
+                <div class="comment-item">
+                    <p class="comment-date">2024-03-21</p>
+                    <p class="comment-content">제육볶음이 너무 맛있었어요! 다음에도 많이 나왔으면 좋겠습니다.</p>
+                    <p class="comment-rating">평가: 😍</p>
+                </div>
+                <!-- 더 많은 댓글이 들어갈 공간 -->
+            </div>
+        </section>
+
+        <section id="users" class="admin-section">
+            <h2>가입자 현황</h2>
+            <div class="user-stats">
+                <div class="stat-card">
+                    <h3>총 가입자 수</h3>
+                    <p class="stat-value">350명</p>
+                </div>
+                <div class="stat-card">
+                    <h3>오늘 평가 참여</h3>
+                    <p class="stat-value">120명</p>
+                </div>
+                <div class="stat-card">
+                    <h3>평균 참여율</h3>
+                    <p class="stat-value">85%</p>
+                </div>
+            </div>
+            <div class="user-list">
+                <div class="user-filters">
+                    <select>
+                        <option>2025년</option>
+                        <option>2024년</option>
+                    </select>
+                    <select>
+                        <option>전체 학년</option>
+                        <option>1학년</option>
+                        <option>2학년</option>
+                        <option>3학년</option>
+                    </select>
+                    <select>
+                        <option>전체 반</option>
+                        <option>1반</option>
+                        <option>2반</option>
+                        <option>3반</option>
+                        <option>4반</option>
+                        <option>5반</option>
+                        <option>6반</option>
+                        <option>7반</option>
+                        <option>8반</option>
+                    </select>
+                </div>
+                <div class="user-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>학년</th>
+                                <th>반</th>
+                                <th>번호</th>
+                                <th>이름</th>
+                                <th>최근 평가일</th>
+                                <th>평가 참여율</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>김학생</td>
+                                <td>2024-03-21</td>
+                                <td>95%</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>이학생</td>
+                                <td>2024-03-21</td>
+                                <td>90%</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>박학생</td>
+                                <td>2024-03-20</td>
+                                <td>85%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 급식 만족도 평가 시스템 - 관리자 페이지</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
