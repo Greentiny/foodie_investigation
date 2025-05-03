@@ -7,6 +7,10 @@
     <title>급식 만족도 평가</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase App (필수) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 
 <body>
@@ -17,6 +21,7 @@
             </button>
             <h1>오늘의 급식 만족도 평가</h1>
             <p class="date">2024년 3월 21일</p>
+
         </div>
         <nav id="sideNav" class="side-nav">
             <div class="nav-header">
@@ -25,10 +30,12 @@
                 </button>
             </div>
             <ul>
+                <li><a id="loginBtn" href="login.html">로그인</a></li>
                 <li><a href="#meal-info">오늘의 메뉴</a></li>
                 <li><a href="#rating">만족도 평가</a></li>
                 <li><a href="#comments">의견 남기기</a></li>
                 <li><a href="#popular-menu">인기 메뉴</a></li>
+
             </ul>
         </nav>
     </header>
@@ -46,7 +53,7 @@
 
             <section id="rating" class="rating">
                 <h2>만족도 평가</h2>
-                <div class="emoji-rating">
+                <div class="emoji-group">
                     <button class="emoji-btn" data-rating="5">😍</button>
                     <button class="emoji-btn" data-rating="4">😊</button>
                     <button class="emoji-btn" data-rating="3">😐</button>
@@ -73,7 +80,7 @@
                 </div>
 
                 <div class="comment-board">
-                    <h3>공개 댓글</h3>
+                    <h3>댓글</h3>
                     <div class="comment-list">
                         <div class="comment-item">
                             <div class="comment-header">
@@ -157,36 +164,7 @@
     </footer>
 
     <script type="module" src="script.js"></script>
-    <script>
-        document.getElementById('menuBtn').addEventListener('click', function () {
-            document.getElementById('sideNav').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-
-        document.getElementById('closeBtn').addEventListener('click', function () {
-            document.getElementById('sideNav').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
-
-        // 부드러운 스크롤 이동 및 메뉴 닫기
-        document.querySelectorAll('.side-nav a').forEach(link => {
-            link.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href && href.startsWith('#')) {
-                    e.preventDefault();
-                    const target = document.querySelector(href);
-                    if (target) {
-                        window.scrollTo({
-                            top: target.getBoundingClientRect().top + window.scrollY - document.querySelector('.fixed-header').offsetHeight - 10,
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-                document.getElementById('sideNav').classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 
 </html>

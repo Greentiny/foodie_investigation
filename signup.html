@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: #f5f6fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-container {
+            background: #fff;
+            padding: 32px 28px 24px 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .signup-container h2 {
+            margin-bottom: 24px;
+            color: #222;
+        }
+
+        .signup-container input[type="text"],
+        .signup-container input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .signup-container button {
+            width: 100%;
+            padding: 10px 0;
+            background: #222;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .signup-container .back-link {
+            margin-top: 10px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .signup-container .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <!-- Firebase App (필수) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+</head>
+
+<body>
+    <form class="signup-container">
+        <h2>회원가입</h2>
+        <input type="text" name="username" placeholder="이메일" required>
+        <input type="password" name="password" placeholder="비밀번호" required>
+        <input type="password" name="password_confirm" placeholder="비밀번호 확인" required>
+        <button type="submit">회원가입</button>
+        <a href="login.html" class="back-link">← 로그인으로 돌아가기</a>
+    </form>
+    <script src="signup.js"></script>
+</body>
+
+</html>
