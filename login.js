@@ -32,13 +32,12 @@ document.querySelector('.login-container').addEventListener('submit', async func
 
     try {
         await auth.signInWithEmailAndPassword(username, password);
-        alert('로그인 성공!');
-        window.location.href = 'index.html'; // 로그인 후 이동할 페이지
+        window.location.href = 'index.html';
     } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-            alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+            showToast('아이디 또는 비밀번호가 올바르지 않습니다.');
         } else {
-            alert('로그인 실패: ' + error.message);
+            showToast('로그인 실패');
         }
     }
 });

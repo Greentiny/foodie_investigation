@@ -29,23 +29,133 @@ if (!localStorage.getItem('userId')) {
 }
 const userId = localStorage.getItem('userId');
 
-const user = firebase.auth().currentUser;
-const currentUid = user ? user.uid : null;
+let currentUid = null;
+let commentList = null;
+let createComment = null;
 
-// 이모지 평가 기능
+firebase.auth().onAuthStateChanged(function (user) {
+    currentUid = user ? user.uid : null;
+    // 로그인 상태가 바뀔 때마다 댓글 새로고침
+    loadDailyRatings();
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const emojiButtons = document.querySelectorAll('.emoji-btn');
     const commentTextarea = document.querySelector('textarea');
     const submitButton = document.querySelector('.submit-btn');
     const commentTypeSelector = document.querySelector('.comment-type-selector');
-    const commentList = document.querySelector('.comment-list');
+    commentList = document.querySelector('.comment-list');
+
+    // 댓글 생성 함수 전역 할당
+    createComment = function (content, rating, type, key, timeString, commentUserId) {
+        const commentItem = document.createElement('div');
+        commentItem.className = 'comment-item';
+        let contentStyle = '';
+        if (type === 'private') {
+            contentStyle = 'color: #888;';
+        }
+
+        // 더보기 메뉴 HTML
+        const moreMenuHTML = `
+            <div class="more-menu-container" style="position:relative; display:inline-block;">
+                <button class="more-btn" style="background:none; border:none; font-size:20px; cursor:pointer;">⋮</button>
+                <div class="more-menu" style="display:none; position:absolute; right:0; background:#fff; border:1px solid #ccc; z-index:10;">
+                    <div class="edit-btn" style="padding:8px 16px; cursor:pointer;">수정</div>
+                    <div class="delete-btn" style="padding:8px 16px; cursor:pointer;">삭제</div>
+                </div>
+            </div>
+        `;
+
+        commentItem.innerHTML = `
+            <div class="comment-header" style="display:flex; align-items:center; justify-content:space-between;">
+                <div>
+                    <span class="comment-time">${timeString || ''}</span>
+                    <span class="comment-rating">평가: ${rating}</span>
+                    ${type === 'private' ? '<span style="font-size:12px; color:tomato; margin-left:8px;">(비공개)</span>' : ''}
+                </div>
+                ${moreMenuHTML}
+            </div>
+            <p class="comment-content" style="${contentStyle}">${content}</p>
+        `;
+
+        const commentContent = commentItem.querySelector('.comment-content');
+
+        // 더보기 메뉴 동작
+        const moreBtn = commentItem.querySelector('.more-btn');
+        const moreMenu = commentItem.querySelector('.more-menu');
+        moreBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', function () {
+            moreMenu.style.display = 'none';
+        });
+
+        // 인라인 수정
+        commentItem.querySelector('.edit-btn').addEventListener('click', function () {
+            moreMenu.style.display = 'none';
+            const textarea = document.createElement('textarea');
+            textarea.value = commentContent.textContent;
+            textarea.style.width = '100%';
+            const saveBtn = document.createElement('button');
+            saveBtn.textContent = '저장';
+            saveBtn.style.marginRight = '8px';
+            const cancelBtn = document.createElement('button');
+            cancelBtn.textContent = '취소';
+
+            commentContent.style.display = 'none';
+            commentContent.parentNode.insertBefore(textarea, commentContent);
+            commentContent.parentNode.insertBefore(saveBtn, commentContent);
+            commentContent.parentNode.insertBefore(cancelBtn, commentContent);
+
+            saveBtn.addEventListener('click', function () {
+                const newComment = textarea.value.trim();
+                if (newComment) {
+                    updateRating(key, { comment: newComment });
+                    commentContent.textContent = newComment;
+                }
+                textarea.remove();
+                saveBtn.remove();
+                cancelBtn.remove();
+                commentContent.style.display = '';
+            });
+
+            cancelBtn.addEventListener('click', function () {
+                textarea.remove();
+                saveBtn.remove();
+                cancelBtn.remove();
+                commentContent.style.display = '';
+            });
+        });
+
+        // 인라인 삭제
+        commentItem.querySelector('.delete-btn').addEventListener('click', function () {
+            moreMenu.style.display = 'none';
+            const confirmDiv = document.createElement('div');
+            confirmDiv.style.marginTop = '8px';
+            confirmDiv.innerHTML = `
+                <span>정말 삭제하시겠습니까?</span>
+                <button class="confirm-delete-btn" style="margin-left:8px;">삭제</button>
+                <button class="cancel-delete-btn" style="margin-left:4px;">취소</button>
+            `;
+            commentItem.appendChild(confirmDiv);
+
+            confirmDiv.querySelector('.confirm-delete-btn').addEventListener('click', function () {
+                deleteRating(key);
+                commentItem.remove();
+            });
+            confirmDiv.querySelector('.cancel-delete-btn').addEventListener('click', function () {
+                confirmDiv.remove();
+            });
+        });
+
+        return commentItem;
+    };
 
     // 이모지 버튼 클릭 이벤트
     emojiButtons.forEach(button => {
         button.addEventListener('click', function () {
-            // 모든 버튼에서 active 클래스 제거
             emojiButtons.forEach(btn => btn.classList.remove('active'));
-            // 클릭된 버튼에 active 클래스 추가
             this.classList.add('active');
         });
     });
@@ -74,137 +184,20 @@ document.addEventListener('DOMContentLoaded', function () {
             commentList.insertBefore(newComment, commentList.firstChild);
         }
 
-        // 여기에 서버로 데이터를 전송하는 코드를 추가할 예정
         saveDailyRating(selectedRating.dataset.rating, comment, commentType);
-        console.log('평가:', selectedRating.dataset.rating);
-        console.log('의견:', comment);
-        console.log('댓글 타입:', commentType);
-
-        // 제출 후 초기화
         emojiButtons.forEach(btn => btn.classList.remove('active'));
         commentTextarea.value = '';
         alert('평가가 제출되었습니다. 감사합니다!');
     });
-
-    // 댓글 생성 함수
-    function createComment(content, rating, type, key, timeString, commentUserId) {
-        const commentItem = document.createElement('div');
-        commentItem.className = 'comment-item';
-        let contentStyle = '';
-        if (type === 'private') {
-            contentStyle = 'color: #888;';
-        }
-
-        // 더보기 메뉴 HTML
-        const moreMenuHTML = `
-            <div class="more-menu-container" style="position:relative; display:inline-block;">
-                <button class="more-btn" style="background:none; border:none; font-size:20px; cursor:pointer;">⋮</button>
-                <div class="more-menu" style="display:none; position:absolute; right:0; background:#fff; border:1px solid #ccc; z-index:10;">
-                    <div class="edit-btn" style="padding:8px 16px; cursor:pointer;">수정</div>
-                    <div class="delete-btn" style="padding:8px 16px; cursor:pointer;">삭제</div>
-                </div>
-            </div>
-        `;
-
-        commentItem.innerHTML = `
-            <div class="comment-header" style="display:flex; align-items:center; justify-content:space-between;">
-                <div>
-                    <span class="comment-time">${timeString || ''}</span>
-                    <span class="comment-rating">평가: ${rating}</span>
-                    ${type === 'private' ? '<span style="font-size:12px; color:#888; margin-left:8px;">(비공개)</span>' : ''}
-                </div>
-                ${moreMenuHTML}
-            </div>
-            <p class="comment-content" style="${contentStyle}">${content}</p>
-        `;
-
-        const commentContent = commentItem.querySelector('.comment-content');
-
-        // 더보기 메뉴 동작
-        const moreBtn = commentItem.querySelector('.more-btn');
-        const moreMenu = commentItem.querySelector('.more-menu');
-        moreBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
-        });
-        document.addEventListener('click', function () {
-            moreMenu.style.display = 'none';
-        });
-
-        // 인라인 수정
-        commentItem.querySelector('.edit-btn').addEventListener('click', function () {
-            moreMenu.style.display = 'none';
-            // textarea와 저장/취소 버튼 생성
-            const textarea = document.createElement('textarea');
-            textarea.value = commentContent.textContent;
-            textarea.style.width = '100%';
-            const saveBtn = document.createElement('button');
-            saveBtn.textContent = '저장';
-            saveBtn.style.marginRight = '8px';
-            const cancelBtn = document.createElement('button');
-            cancelBtn.textContent = '취소';
-
-            // 기존 내용 숨기고 textarea 삽입
-            commentContent.style.display = 'none';
-            commentContent.parentNode.insertBefore(textarea, commentContent);
-            commentContent.parentNode.insertBefore(saveBtn, commentContent);
-            commentContent.parentNode.insertBefore(cancelBtn, commentContent);
-
-            // 저장
-            saveBtn.addEventListener('click', function () {
-                const newComment = textarea.value.trim();
-                if (newComment) {
-                    updateRating(key, { comment: newComment });
-                    commentContent.textContent = newComment;
-                }
-                // UI 복원
-                textarea.remove();
-                saveBtn.remove();
-                cancelBtn.remove();
-                commentContent.style.display = '';
-            });
-
-            // 취소
-            cancelBtn.addEventListener('click', function () {
-                textarea.remove();
-                saveBtn.remove();
-                cancelBtn.remove();
-                commentContent.style.display = '';
-            });
-        });
-
-        // 인라인 삭제
-        commentItem.querySelector('.delete-btn').addEventListener('click', function () {
-            moreMenu.style.display = 'none';
-            // 삭제 확인 UI
-            const confirmDiv = document.createElement('div');
-            confirmDiv.style.marginTop = '8px';
-            confirmDiv.innerHTML = `
-                <span>정말 삭제하시겠습니까?</span>
-                <button class="confirm-delete-btn" style="margin-left:8px;">삭제</button>
-                <button class="cancel-delete-btn" style="margin-left:4px;">취소</button>
-            `;
-            commentItem.appendChild(confirmDiv);
-
-            // 삭제
-            confirmDiv.querySelector('.confirm-delete-btn').addEventListener('click', function () {
-                deleteRating(key);
-                commentItem.remove();
-            });
-            // 취소
-            confirmDiv.querySelector('.cancel-delete-btn').addEventListener('click', function () {
-                confirmDiv.remove();
-            });
-        });
-
-        return commentItem;
-    }
 
     // 관리자 페이지 기능
     if (document.querySelector('.admin-section')) {
         // 차트 초기화 (실제 구현 시 Chart.js 등의 라이브러리 사용)
         initializeCharts();
     }
+
+    // 페이지 로드시 댓글 로드
+    loadDailyRatings();
 });
 
 // 차트 초기화 함수
@@ -274,14 +267,22 @@ function updateRating(key, newData) {
         .catch(err => alert('수정 실패: ' + err));
 }
 
+// 댓글 로드 함수
 function loadDailyRatings() {
+    if (!commentList || !createComment) return;
+    commentList.innerHTML = ""; // 기존 댓글 초기화
     const today = new Date().toISOString().slice(0, 10);
     const ratingRef = ref(database, 'dailyRatings/' + today);
 
     get(ratingRef).then(snapshot => {
         if (snapshot.exists()) {
             const ratings = snapshot.val();
-            Object.entries(ratings).forEach(([key, data]) => {
+            // 1. Object.entries로 배열화 후 timestamp 내림차순 정렬
+            const sortedEntries = Object.entries(ratings).sort(
+                (a, b) => b[1].timestamp - a[1].timestamp
+            );
+            // 2. 정렬된 배열로 댓글 생성
+            sortedEntries.forEach(([key, data]) => {
                 if (data.commentType === 'private') {
                     // 비공개 댓글은 본인만 볼 수 있음
                     if (data.userId !== currentUid) return;
