@@ -179,10 +179,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // 댓글 생성
         const newComment = createComment(comment, selectedRating.textContent, commentType, null, null, userId);
 
-        // 공개 댓글이면 화면에 표시
-        if (commentType === 'public') {
-            commentList.insertBefore(newComment, commentList.firstChild);
-        }
+        // 댓글을 화면에 표시 (공개/비공개 모두)
+        commentList.insertBefore(newComment, commentList.firstChild);
 
         saveDailyRating(selectedRating.dataset.rating, comment, commentType);
         emojiButtons.forEach(btn => btn.classList.remove('active'));
@@ -271,6 +269,12 @@ function updateRating(key, newData) {
 function loadDailyRatings() {
     if (!commentList || !createComment) return;
     commentList.innerHTML = ""; // 기존 댓글 초기화
+
+    // 로그아웃 상태면 댓글을 보여주지 않음
+    if (!currentUid) {
+        return;
+    }
+
     const today = new Date().toISOString().slice(0, 10);
     const ratingRef = ref(database, 'dailyRatings/' + today);
 
